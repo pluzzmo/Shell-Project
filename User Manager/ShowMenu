@@ -4,9 +4,10 @@
 function ShowMenu
 {
 	clear
-	choix = 0
+	choice = 0
 	rep = 1
-	while [ $choix -ne 1 -a $choix -ne 2 -a $choix -ne 3 -a $choix -ne 4 -a $choix -ne 5 -a $choix -ne 6  ]
+	
+	while [ $choice -ne 1 -a $choice -ne 2 -a $choice -ne 3 -a $choice -ne 4 -a $choice -ne 5 -a $choice -ne 6  ]
 	do
 		echo " "
 		echo "    ***************************************************************"
@@ -20,22 +21,25 @@ function ShowMenu
 		echo "    *           6- Return                                         *"
 		echo "    ***************************************************************"
 		echo " "
-		echo -n "Choice : "
-		read choix
+		echo -n "Choose an option : "
+		read choice
 	done
-	case $choix in
+	
+	case $choice in
 		"1") AddUser;;
-"2") AddUsers;;
-"3") DeleteUser;;
-"4") ./utilisateurs/ShowUsers;;
-"5") ./utilisateurs/ManageUsers;;
-"6")./ShowMenu;;
-*) clear
-echo "Incorrect input"
-sleep 5
-ShowMenu
-;;
-esac 
+		"2") AddUsers;;
+		"3") DeleteUser;;
+		"4") ./ShowUsers;;
+		"5") ./ManageUsers;;
+		"6") ./ShowMenu;;
+	*)
+	
+	clear
+	echo "Incorrect input"
+	sleep 5
+	ShowMenu;;
+
+	esac 
 }
 
 
