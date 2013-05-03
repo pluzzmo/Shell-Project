@@ -1,7 +1,42 @@
 #! /bin/bash
 
 #########################	Main function	###########################
-
+function ShowMenu
+{
+	clear
+	choix = 0
+	rep = 1
+	while [ $choix -ne 1 -a $choix -ne 2 -a $choix -ne 3 -a $choix -ne 4 -a $choix -ne 5 -a $choix -ne 6  ]
+	do
+		echo " "
+		echo "    ***************************************************************"
+		echo "    *                	       Users Manager 						*"
+		echo "    ***************************************************************"
+		echo "    *           1- Create Single User        				        *"
+		echo "    *           2- Create Multiple Users 						    *"
+		echo "    *           3- Delete Users 								    *"
+		echo "    *           4- Show Users 				                    *"
+		echo "    *           5- Manage Passwords 				                *"
+		echo "    *           6- Return                                         *"
+		echo "    ***************************************************************"
+		echo " "
+		echo -n "Choice : "
+		read choix
+	done
+	case $choix in
+		"1") AddUser;;
+"2") AddUsers;;
+"3") DeleteUser;;
+"4") ./utilisateurs/ShowUsers;;
+"5") ./utilisateurs/ManageUsers;;
+"6")./ShowMenu;;
+*) clear
+echo "Incorrect input"
+sleep 5
+ShowMenu
+;;
+esac 
+}
 
 
 
