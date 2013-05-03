@@ -1,0 +1,33 @@
+#! /bin/bash
+
+#########################	Main function	###########################
+
+
+
+
+#########################	Sub-functions	###########################
+
+# Verify if user exists
+function UserExists
+{
+	a=` wc -l /etc/passwd | cut -d " " -f 1`
+	echo "" > usr
+	for i in `seq 1 "$a"`;
+	do
+		sed -n "$i"p /etc/passwd | cut -d : -f 1 >> usr 
+	done
+	exists=`grep -wc "$1" usr`
+	if [ $exists -gt 0 ]; then
+		return 0
+	else return 1
+	fi
+	echo $exists
+}
+
+# Show Groups
+
+# Add Single User
+
+# Add Multiple Users
+
+# Delete Users
