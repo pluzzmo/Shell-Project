@@ -21,10 +21,20 @@ function UserExists
 		return 0
 	else return 1
 	fi
-	echo $exists
 }
 
 # Show Groups
+function ListGroups
+{
+	n=`wc -l /etc/group | cut -d " " -f 1`
+	for i in `seq 1 "$n"`;
+	do 
+	gid=`sed -n "$i"p /etc/group | cut -d : -f 3`
+	if [ "$gid" -ge 500 ] || [ "$gid" -eq 0 ]; then
+		sed -n "$i"p /etc/group | cut -d : -f 1
+	fi
+done
+}
 
 # Add Single User
 
