@@ -27,22 +27,20 @@ function ShowMenu
 	
 	case $choice in
 		"1") AddUser;;
-		"2") AddUsers;;
-		"3") DeleteUser;;
-		"4") ./ShowUsers;;
-		"5") ./ManageUsers;;
-		"6") ./ShowMenu;;
-	*)
-	
-	clear
-	echo "Incorrect input"
-	sleep 5
-	ShowMenu;;
+"2") AddUsers;;
+"3") DeleteUser;;
+"4") ./ShowUsers;;
+"5") ./ManageUsers;;
+"6") ./ShowMenu;;
+*)
 
-	esac 
+clear
+echo "Incorrect input"
+sleep 5
+ShowMenu;;
+
+esac 
 }
-
-
 
 #########################	Sub-functions	###########################
 
@@ -91,7 +89,9 @@ function AddUser
 		echo "$s" > usr
 		nbre=`grep -c "^[a-zA-Z]" usr`
 	done 
+	
 	UserExists "$login" 
+	
 	if [ "$?" -eq 0 ]; then 
 		echo "User exists. Please try with another name !!"
 		sleep 2
@@ -101,10 +101,11 @@ function AddUser
 		read -p " Choose Group : " group
 		read -s -p "Password :" password
 		useradd -p "$password" -g "$group" "$login" >> /dev/null 2<&1
-		operation=$?
-		echo "$operation"
-		if [ "$operation" -eq 0 ]; then 
-			echo "User was added successefully !!"
+
+		echo "$?"
+		
+		if [ "$?" -eq 0 ]; then 
+			echo "User was created successefully !!"
 			sleep 2
 			ShowMenu
 		else echo "An Error was occured !!"
@@ -115,5 +116,70 @@ function AddUser
 }
 
 # Add Multiple Users
+function AddUsers
+{
+	clear
+	read -p "Path :" path
+	read -p "Delimeter :" delimeter
+	
+	nb=`wc -l "$path" | cut -d " " -f 1`
+	
+	for i in `seq 1 "$nb"`
+	do
+		login=`sed -n "$i"p "$path" | cut -d "$delimeter" -f 1`
+		group=`sed -n "$i"p "$path" | cut -d "$delimeter" -f 2`
+		
+		useradd -g "$group" -p "$login" "$login" >> /dev/null 2<&1
+		
+		if [ "$?" -eq 0 ]; then
+			echo "User $login was created successfully"
+			sleep 2
+		else "User $login was not created"
+		fi
+	done
+	
+	ShowMenu
+}
 
 # Delete Users
+function DeleteUser
+{
+	clear
+	echo ""
+	read -p "User : " user
+	UserExists "$user" 
+	
+	if [ "$?" -eq 1 ]; then
+		echo "User not exists"
+		sleep 2
+		DeleteUser
+	else 
+		read -p "Delete Personal folder? (1:yes/2:non)? : " home
+		
+		if [ "$home" -eq 1 ]; then
+			userdel -r "$user" >> /dev/null 2<&1
+			if [ "$?" -eq 0 ]; then 
+				echo "User $user was deleted successfully"
+				sleep 2
+				ShowMenu
+			else
+				echo "User $user was not deleted"
+				sleep 2
+				ShowMenu
+			fi 
+		else 
+			userdel "$user" >> /dev/null 2<&1
+			if [ "$?" -eq 0 ]; then 
+				echo "User $user was deleted successfully"
+				sleep 2
+				ShowMenu
+			else
+				echo "User $user was not deleted"
+				sleep 2
+				ShowMenu
+			fi 
+		fi
+	fi
+}
+
+ShowMenu
